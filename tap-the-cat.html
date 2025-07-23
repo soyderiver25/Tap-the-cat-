@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tap the Cat!</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0;
+      padding: 1em;
+      background-color: #fefefe;
+    }
+    h1 {
+      font-size: 2em;
+      margin-bottom: 0.5em;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      gap: 10px;
+    }
+    .cat {
+      width: 100px;
+      height: 100px;
+      background-color: #eee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      font-size: 2em;
+      cursor: pointer;
+      user-select: none;
+    }
+    .score {
+      margin-top: 1em;
+      font-size: 1.2em;
+    }
+    .new-round {
+      margin-top: 1em;
+      padding: 0.5em 1em;
+      font-size: 1em;
+    }
+  </style>
+</head>
+<body>
+  <h1>🐱 Tap the Cat!</h1>
+  <p>Tap only the <strong>naughty cats</strong> (😈)!</p>
+  <div class="grid" id="catGrid"></div>
+  <div class="score" id="score">Score: 0</div>
+  <button class="new-round" onclick="startGame()">🔄 New Round</button>
+
+  <script>
+    const grid = document.getElementById('catGrid');
+    const scoreDisplay = document.getElementById('score');
+    let score = 0;
+
+    function getRandomCat() {
+      return Math.random() < 0.3 ? 'naughty' : 'normal';
+    }
+
+    function startGame() {
+      grid.innerHTML = '';
+      for (let i = 0; i < 9; i++) {
+        const catType = getRandomCat();
+        const cat = document.createElement('div');
+        cat.className = 'cat';
+        cat.textContent = catType === 'naughty' ? '😈' : '😺';
+        cat.dataset.type = catType;
+        cat.onclick = () => {
+          if (cat.dataset.clicked) return;
+          cat.dataset.clicked = true;
+          if (catType === 'naughty') {
+            score++;
+            cat.style.backgroundColor = '#d4edda';
+          } else {
+            score--;
+            cat.style.backgroundColor = '#f8d7da';
+          }
+          scoreDisplay.textContent = `Score: ${score}`;
+        };
+        grid.appendChild(cat);
+      }
+    }
+
+    startGame();
+  </script>
+</body>
+</html>
